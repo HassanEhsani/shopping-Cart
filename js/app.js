@@ -25,7 +25,7 @@ const renderProducts = () => {
               </div>
               <h2 class="product__title">${item.name}</h2>
               <h3 class="product__price">${item.price} افغانی</h3>
-              <button class="btn btn-primary">افزودن به سبد خرید</button>
+              <button class="btn btn-primary" onclick="addToCart(${index})">افزودن به سبد خرید</button>
             </div> 
         `;
   });
@@ -48,6 +48,7 @@ const renderCartItems = () => {
   }
 
   cart.items.forEach((item) => {
+    totalPrice += item.total
     cartDiv.innerHTML += `
         <div class="cart__item">
              <div class="col-md-4">
@@ -65,6 +66,38 @@ const renderCartItems = () => {
 
   totalPriceEl.innerHTML = `مجموع: ${totalPrice} افغانی`
 };
+
+const addToCart = (productIndex)=>{
+    const product = products[productIndex]
+
+    let existingProduct = false
+    let newCartItems = cart.items.reduce((state,item)=>{
+        if(item.name === product.name){
+            existingProduct = true
+
+            const newItem = {
+                ...item,
+                qty: item.qty + 1,
+                total: (item.qty + 1) * item.price
+            }
+            return [...state, newItem]
+        }
+        return[...state, item]
+    },[])
+
+    if(!existingProduct){
+        newCartItems.push({
+            ...product,
+            qty:1,
+            total: product.price
+        })
+    }
+    cart = {
+        ...cart,
+        items: newCartItems
+    }
+    renderCartItems()
+}
 
 renderProducts();
 renderCartItems()
