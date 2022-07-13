@@ -50,3 +50,40 @@ body{
     font-weight: bolder;
     color: var(--color-price);
 }
+
+.cart{
+    background-color: var(--bg-color-secondary);
+    width: 100%;
+    height: auto;
+    text-align: center;
+    padding: 1rem;
+    margin: 3rem;
+    border-radius: 15px;
+}
+.cart__line{
+    border: 1px solid var(--color-cart-line);
+    width: 85%;
+    margin:20px auto;
+}
+
+.cart__item{
+    display: flex;
+    justify-content: space-between;
+    direction: ltr;
+    padding: 15px;
+    margin: 30px 0;
+}
+.cart__item-title{
+    font-size: 16px;
+    padding-top: 10px;
+}
+
+.p-8{
+    padding-top: 8px;
+}
+.cart__total-price{
+    justify-content: center;
+    margin-top: 30px;
+    font-weight: bolder;
+    color: var(--color-price);
+}
