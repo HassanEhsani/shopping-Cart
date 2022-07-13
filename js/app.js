@@ -15,7 +15,7 @@ const products = [
 
 const renderProducts = () => {
   const productDiv = document.querySelector(".products");
-  productDiv.innerHTML = '';
+  productDiv.innerHTML = "";
 
   products.forEach((item, index) => {
     productDiv.innerHTML += `
@@ -31,4 +31,40 @@ const renderProducts = () => {
   });
 };
 
-renderProducts()
+let cart = {
+  items: [],
+  total: 0,
+};
+
+const renderCartItems = () => {
+  const cartDiv = document.querySelector(".cart__items");
+  cartDiv.innerHTML = "";
+
+  const totalPriceEl = document.querySelector(".cart__total-price");
+  let totalPrice = 0;
+
+  if (cart.items.length === 0) {
+    cartDiv.innerHTML = "محصولی در سبد خرید وجود ندارد!";
+  }
+
+  cart.items.forEach((item) => {
+    cartDiv.innerHTML += `
+        <div class="cart__item">
+             <div class="col-md-4">
+                 <button class="btn btn-danger">حذف</button>
+                  </div>
+                  <div class="col-md-4 p-8">
+                     <div class="qty">${item.qty}</div>
+                        </div>
+                    <div class="col-md-4">
+                    <h3 class="cart__item-title">${item.name}</h3>
+                </div>
+         </div>
+        `;
+  });
+
+  totalPriceEl.innerHTML = `مجموع: ${totalPrice} افغانی`
+};
+
+renderProducts();
+renderCartItems()
