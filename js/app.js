@@ -48,11 +48,11 @@ const renderCartItems = () => {
   }
 
   cart.items.forEach((item) => {
-    totalPrice += item.total
+    totalPrice += item.total;
     cartDiv.innerHTML += `
         <div class="cart__item">
              <div class="col-md-4">
-                 <button class="btn btn-danger">حذف</button>
+                 <button class="btn btn-danger" onclick="removeFromCart('${item.name}')">حذف</button>
                   </div>
                   <div class="col-md-4 p-8">
                      <div class="qty">${item.qty}</div>
@@ -64,40 +64,64 @@ const renderCartItems = () => {
         `;
   });
 
-  totalPriceEl.innerHTML = `مجموع: ${totalPrice} افغانی`
+  totalPriceEl.innerHTML = `مجموع: ${totalPrice} افغانی`;
 };
 
-const addToCart = (productIndex)=>{
-    const product = products[productIndex]
+const addToCart = (productIndex) => {
+  const product = products[productIndex];
 
-    let existingProduct = false
+  let existingProduct = false;
+  let newCartItems = cart.items.reduce((state, item) => {
+    if (item.name === product.name) {
+      existingProduct = true;
+
+      const newItem = {
+        ...item,
+        qty: item.qty + 1,
+        total: (item.qty + 1) * item.price,
+      };
+      return [...state, newItem];
+    }
+    return [...state, item];
+  }, []);
+
+  if (!existingProduct) {
+    newCartItems.push({
+      ...product,
+      qty: 1,
+      total: product.price,
+    });
+  }
+  cart = {
+    ...cart,
+    items: newCartItems,
+  };
+  renderCartItems();
+};
+
+const removeFromCart = (productName) => {
     let newCartItems = cart.items.reduce((state,item)=>{
-        if(item.name === product.name){
-            existingProduct = true
-
+        if(item.name === productName){
             const newItem = {
                 ...item,
-                qty: item.qty + 1,
-                total: (item.qty + 1) * item.price
+                qty: item.qty -1,
+                total: (item.qty -1) * item.price
             }
-            return [...state, newItem]
+            if(newItem.qty >0){
+                return[...state, newItem]
+            }
+            else{
+                return state
+            }
         }
-        return[...state, item]
+        return[...state,item]
     },[])
-
-    if(!existingProduct){
-        newCartItems.push({
-            ...product,
-            qty:1,
-            total: product.price
-        })
-    }
     cart = {
         ...cart,
         items: newCartItems
     }
     renderCartItems()
-}
+};
 
 renderProducts();
-renderCartItems()
+renderCartItems();
